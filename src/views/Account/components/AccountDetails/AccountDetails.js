@@ -671,7 +671,7 @@ const AccountDetails = props => {
                 label="Private Message Setting"
               />
             </Grid>
-            <Grid
+            {/* <Grid
               item
               md={6}
               xs={12}
@@ -689,7 +689,7 @@ const AccountDetails = props => {
                 }
                 label="Share Watchlist Setting"
               />
-            </Grid>
+            </Grid> */}
           </Grid>
         </CardContent>
         <Divider />

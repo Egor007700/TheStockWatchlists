@@ -18,6 +18,7 @@ import {
 } from '@material-ui/core';
 import { before, after } from 'underscore';
 import Axios from 'axios';
+import lozad from 'lozad';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -45,12 +46,16 @@ const useStyles = makeStyles(() => ({
 
 const EarningReportStocks = props => {
   const { className, products, ...rest } = props;
-
+  const observer = lozad();
+  observer.observe();
   const classes = useStyles();
   const getImagename=()=>{
     console.log("erorrmessage");
     return this.src='images/avatars/avatar_man.png';
   };
+  const imgError = ((e) => {
+    console.log("ImageError", e);
+  })
 
   return (
     <Card
@@ -71,8 +76,13 @@ const EarningReportStocks = props => {
             >
               <ListItemAvatar style={{marginLeft:"10px"}}>
                 <img
+                  // className="lozad"
+                  // width={48}
+                  // height={48}
                   className={classes.image}
+                  // data-src={product.imageUrl}
                   src={product.imageUrl}
+                  onError={(e)=>{e.target.onerror = null; e.target.src="/images/avatars/null_symbol.png"}}
                 />
               </ListItemAvatar>
               <ListItemText

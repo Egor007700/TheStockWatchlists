@@ -54,6 +54,9 @@ class App extends Component {
       if (inteval > 72 * 60 * 60 * 1000){
         localStorage.clear();
       }
+      else{
+        // browserHistory.push('/dashboard')
+      }
     }
   }
   render() {

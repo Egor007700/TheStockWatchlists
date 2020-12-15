@@ -6,7 +6,7 @@ import SecurityIcon from '@material-ui/icons/Security';
 import IconButton from '@material-ui/core/IconButton';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import LanguageIcon from '@material-ui/icons/Language';
-import {CardContent, Card} from '@material-ui/core';
+import {CardContent, Card,CardHeader, Divider} from '@material-ui/core';
 import { connect } from "react-redux";
 import {getsharemethod, setsharemethod} from '../../../../services/api/httpclient';
 import { store } from 'react-notifications-component';
@@ -213,6 +213,11 @@ const SimpleTabs = props => {
 
   return (
     <Card>
+        <CardHeader
+          subheader="Manage the permission"
+          title="Share Watchlist Setting"
+        />
+        <Divider />
         <CardContent>
         <div className={classes.root}>
         <div style={{width:"33%"}}>

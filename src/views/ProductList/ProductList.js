@@ -55,7 +55,7 @@ const ProductList = props => {
   const [weeklongdata, setWeekLongdata] = useState([])
   const [followerslist, setFollowerslist] = useState([])
   const [openText, setOpenText] = React.useState("block");
-  const [searchText, setSearchText] = React.useState("");
+  const [searchText, setSearchText] = React.useState("-1");
   const [progress, setProgress] = React.useState(0);
   const [userEmail, setEmail] = React.useState("");
   const [open, setOpen] = React.useState(true);
@@ -86,50 +86,53 @@ const ProductList = props => {
   React.useEffect(()=>{
     var jwt = require('jwt-simple');
     let secret = "Hero-Hazan-Trading-Watchlist";  
-    getglobalfollowerslist().then(ret=>{
-      ret['data'] = jwt.decode(ret['data']['result'].substring(2,ret['data']['result'].length - 2), secret, true);        
-      if (ret['data']['result'] === 'ok'){
-        setFollowerslist(ret['data']['data']);
-        setTimeout(()=>{
-          setOpen(false);
-        }, 1000)
-        setProgress(20);
-        getearningstocks().then(ret=>{
-          if (ret['data']['result'] === 'ok'){
-            console.log("products", ret['data']['data']);
-            setProducts(ret['data']['data']);
-            setProgress(40);
-            gettopstocks().then(ret=>{
-              if (ret['data']['result'] === 'ok'){
-                console.log("topproducts", ret['data']['data']);
-                setStocks(ret['data']['data']);
-                setWeekStocks(ret['data']['weekdata']);
-                setProgress(60);
-                getshortlong().then(ret=>{
-                  if (ret['data']['result'] === 'ok'){
-                    console.log("shortorlong", ret['data']['data']);
-                    setShortorlong(ret['data']['data']);
-                    setWeekShortorlong(ret['data']['weekdata']);
-                    setProgress(80);
-                    gettopstocksforshortlong().then(ret=>{
-                      if (ret['data']['result'] === 'ok'){
-                        setProgress(100);
-                        console.log("shortorlong", ret['data']['data']);
-                        setShortdata(ret['data']['shortdata']);
-                        setWeekShortdata(ret['data']['weekshortdata']);
-                        setLongdata(ret['data']['longdata']);
-                        setWeekLongdata(ret['data']['weeklongdata']);
-                        setOpenText("none");
-                      }
-                    });
-                              }
-                });
-                      }
-            });
-              }
-        });
-      }
-    });
+    if (intervaltime != 0)
+    {
+      getglobalfollowerslist().then(ret=>{
+        ret['data'] = jwt.decode(ret['data']['result'].substring(2,ret['data']['result'].length - 2), secret, true);        
+        if (ret['data']['result'] === 'ok'){
+          setFollowerslist(ret['data']['data']);
+          setTimeout(()=>{
+            setOpen(false);
+          }, 1000)
+          setProgress(20);
+          getearningstocks().then(ret=>{
+            if (ret['data']['result'] === 'ok'){
+              console.log("products", ret['data']['data']);
+              setProducts(ret['data']['data']);
+              setProgress(40);
+              gettopstocks().then(ret=>{
+                if (ret['data']['result'] === 'ok'){
+                  console.log("topproducts", ret['data']['data']);
+                  setStocks(ret['data']['data']);
+                  setWeekStocks(ret['data']['weekdata']);
+                  setProgress(60);
+                  getshortlong().then(ret=>{
+                    if (ret['data']['result'] === 'ok'){
+                      console.log("shortorlong", ret['data']['data']);
+                      setShortorlong(ret['data']['data']);
+                      setWeekShortorlong(ret['data']['weekdata']);
+                      setProgress(80);
+                      gettopstocksforshortlong().then(ret=>{
+                        if (ret['data']['result'] === 'ok'){
+                          setProgress(100);
+                          console.log("shortorlong", ret['data']['data']);
+                          setShortdata(ret['data']['shortdata']);
+                          setWeekShortdata(ret['data']['weekshortdata']);
+                          setLongdata(ret['data']['longdata']);
+                          setWeekLongdata(ret['data']['weeklongdata']);
+                          setOpenText("none");
+                        }
+                      });
+                                }
+                  });
+                        }
+              });
+                }
+          });
+        }
+      });
+    }
     if (intervaltime != 0)
     {
       setInterval(()=>{
@@ -185,6 +188,7 @@ const ProductList = props => {
   React.useEffect(()=>{
     var jwt = require('jwt-simple');
     let secret = "Hero-Hazan-Trading-Watchlist";  
+    if (searchText === "-1") return;
     console.log("searchtextformostfollowerdusers", searchText);
     if (searchText === ""){
       setOpen(true);
@@ -275,7 +279,7 @@ const ProductList = props => {
             xs={12}
           >{
             followerslist.map(users=>{
-              if (followerslist.length  <=5 )
+              if (followerslist.length  <=5 || open == false )
               {
                 count = count + 1;
                 return (
@@ -283,7 +287,7 @@ const ProductList = props => {
                 )  
               }
               else{
-                if (count < 5){
+                if (count < 5 || open == false){
                   count = count + 1;
                   return (
                     <Watchlist key={count} name={users.username} email={users.email} avatar={users.avatar} myemail={userEmail} timeU={Date.now()} />

@@ -133,6 +133,18 @@ const useStyles1 = makeStyles({
         margin: 0,
       },
     },
+    tr: {
+      cursor:"-webkit-grab",
+      cursor: 'grab',
+      "&:hover" : {
+        cursor:"-webkit-grab",
+        cursor: 'grab',
+      },
+      "&:active" : {
+        cursor:"-webkit-grabbing",
+        cursor: 'grabbing',
+      }
+    },
   });
 
 const sectorOptions=[];
@@ -697,10 +709,7 @@ const UserPageWidget = (props) => {
                   <MTableBodyRow {...props}
                       draggable="true"
                       onDragStart={(e) => {
-                          console.log('onDragStart', props);
                           DrageState.row = props.data.tableData.id
-                          console.log('onDragStart', DrageState);
-                          console.log('onDragStartProps', props);
                       }}
                       onDragEnter={e => {
                           e.preventDefault();
@@ -722,7 +731,7 @@ const UserPageWidget = (props) => {
           }} // components
             options={{
               rowStyle:{
-                padding:'1px'
+                padding:'1px',
               },
               padding:densestring,
               doubleHorizontalScroll:true,

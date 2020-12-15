@@ -19,6 +19,8 @@ import {
   Button
 } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
+import ReactTooltip from 'react-tooltip';
+import HelpIcon from '@material-ui/icons/Help';
 
 const mapStateToProps = state => {
   return { username:state.user.username, useremail:state.user.useremail, dashboard_type:state.common.dashboard_type};
@@ -33,7 +35,18 @@ const useStyles = makeStyles(() => ({
   root: {},
   item: {
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    paddingRight:'5px',
+  },
+  tooltipa:{
+    marginTop:'auto',
+    marginBottom:'auto',
+    marginLeft:'auto',
+    marginRight:'0px'
+  },
+  tooltip:{
+    textColor:'black',
+    color:'black',
   }
 }));
 
@@ -66,26 +79,26 @@ const Notifications = props => {
   const classes = useStyles();
 
   const [data, setData] = React.useState([
-    {id : 1, name:"symbol", label:"Symbol", flag:true, checked:true},
-    {id : 2, name:"sector", label:"Sector", flag:true, checked:true},
-    {id : 3, name:"tradetiming", label:"Trade Timing", flag:false, checked:false},
-    {id : 4, name:"shortorlong", label:"Short/Long", flag:false, checked:false},
-    {id : 5, name:"tradetimeframe", label:"Trade Timeframe", flag:false, checked:false},
-    {id : 6, name:"yearhigh", label:"52Weeks High", flag:false, checked:false},
-    {id : 7, name:"currentprice", label:"Current StockPrice", flag:false, checked:true},
-    {id : 8, name:"currentchange", label:"Change(%)", flag:false, checked:true},
-    {id : 9, name:"entryprice", label:"Entry Price", flag:false, checked:false},
-    {id : 10, name:"entrychange", label:"Change", flag:false, checked:false},
-    {id : 11, name:"stoploss", label:"StopLoss", flag:false, checked:false},
-    {id : 12, name:"tradescore", label:"TradeScore", flag:false, checked:false},
-    {id : 13, name:"exitprice", label:"Exit Price", flag:false, checked:false},
-    {id : 14, name:"earningdate", label:"Earning ReportDate", flag:false, checked:true},
-    {id : 15, name:"alertprice", label:"Alert Price", flag:false, checked:true},
-    {id : 16, name:"rewardinR", label:"Reward InR", flag:false, checked:false},
-    {id : 17, name:"addedprice", label:"Initial Price", flag:false, checked:false},
-    {id : 18, name:"addedpricechange", label:"Change(%)", flag:false, checked:false},
-    {id : 19, name:"dateadded", label:"Date Added", flag:false, checked:true},
-    {id : 20, name:"comment", label:"Comment", flag:false, checked:false}
+    {id : 1, name:"symbol", label:"Symbol", flag:true, checked:true, tooltip:'this is ticker'},
+    {id : 2, name:"sector", label:"Sector", flag:true, checked:true, tooltip:'this is ticker'},
+    {id : 3, name:"tradetiming", label:"Trade Timing", flag:false, checked:false, tooltip:'this is ticker'},
+    {id : 4, name:"shortorlong", label:"Short/Long", flag:false, checked:false, tooltip:'this is ticker'},
+    {id : 5, name:"tradetimeframe", label:"Trade Timeframe", flag:false, checked:false, tooltip:'this is ticker'},
+    {id : 6, name:"yearhigh", label:"52Weeks High", flag:false, checked:false, tooltip:'this is ticker'},
+    {id : 7, name:"currentprice", label:"Current StockPrice", flag:false, checked:true, tooltip:'this is ticker'},
+    {id : 8, name:"currentchange", label:"Change(%)", flag:false, checked:true, tooltip:'this is ticker'},
+    {id : 9, name:"entryprice", label:"Entry Price", flag:false, checked:false, tooltip:'this is ticker'},
+    {id : 10, name:"entrychange", label:"Change", flag:false, checked:false, tooltip:'this is ticker'},
+    {id : 11, name:"stoploss", label:"StopLoss", flag:false, checked:false, tooltip:'this is ticker'},
+    {id : 12, name:"tradescore", label:"TradeScore", flag:false, checked:false, tooltip:''},
+    {id : 13, name:"exitprice", label:"Exit Price", flag:false, checked:false, tooltip:'this is ticker'},
+    {id : 14, name:"earningdate", label:"Earning ReportDate", flag:false, checked:true, tooltip:'this is ticker'},
+    {id : 15, name:"alertprice", label:"Alert Price", flag:false, checked:true, tooltip:''},
+    {id : 16, name:"rewardinR", label:"Reward InR", flag:false, checked:false, tooltip:'this is ticker'},
+    {id : 17, name:"addedprice", label:"Initial Price", flag:false, checked:false, tooltip:'this is ticker'},
+    {id : 18, name:"addedpricechange", label:"Change(%)", flag:false, checked:false, tooltip:'this is ticker'},
+    {id : 19, name:"dateadded", label:"Date Added", flag:false, checked:true, tooltip:'this is ticker'},
+    {id : 20, name:"comment", label:"Comment", flag:false, checked:false, tooltip:'this is ticker'}
   ]);
 
   React.useEffect(()=>{
@@ -294,7 +307,7 @@ const Notifications = props => {
         <CardContent>
           <Grid
             container
-            spacing={6}
+            spacing={3}
             wrap="wrap"
           >
             <Grid
@@ -309,22 +322,40 @@ const Notifications = props => {
                       let bufclassname;
                       if (item.id % 2 == 1)
                       {
-                        return <FormControlLabel
-                        disabled={item.flag}
-                        control={
-                        <Checkbox
-                            checked={item.checked}
-                            onChange={handleChange}
-                            name={item.name}
-                            style={{color:"#00a64c"}}
-                        />
+                        if (item.tooltip == '')
+                        {
+                          return <FormControlLabel
+                          disabled={item.flag}
+                          control={
+                          <Checkbox
+                              checked={item.checked}
+                              onChange={handleChange}
+                              name={item.name}
+                              style={{color:"#00a64c"}}
+                          />
+                          }
+                          label={item.label}
+                          />                          
                         }
-                        label={item.label}
-                    />
+                        else {
+                          return <div style={{display:'flex'}}><FormControlLabel
+                          disabled={item.flag}
+                          control={
+                          <Checkbox
+                              checked={item.checked}
+                              onChange={handleChange}
+                              name={item.name}
+                              style={{color:"#00a64c"}}
+                          />
+                          }
+                          label={item.label}
+                        /><a data-tip data-for={item.name} className={classes.tooltipa}><HelpIcon fontSize='small' color='primary'></HelpIcon></a>
+                        <ReactTooltip id={item.name} type='success' effect='solid' className={classes.tooltip}><span>{item.tooltip}</span></ReactTooltip></div>
                         }
+
+                      }
                   })
               }
-
             </Grid>
             <Grid
               className={classes.item}
@@ -338,20 +369,39 @@ const Notifications = props => {
                         let bufclassname;
                         if (item.id % 2 == 0)
                         {
-                          return <FormControlLabel
-                          disabled={item.flag}
-                          className={bufclassname}
-                          control={
-                          <Checkbox
-                              checked={item.checked}
-                              onChange={handleChange}
-                              name={item.name}
-                              style={{color:"#00a64c"}}
-                          />
+                          if (item.tooltip == '')
+                          {
+                            return <FormControlLabel
+                            disabled={item.flag}
+                            className={bufclassname}
+                            control={
+                            <Checkbox
+                                checked={item.checked}
+                                onChange={handleChange}
+                                name={item.name}
+                                style={{color:"#00a64c"}}
+                            />
+                            }
+                            label={item.label}
+                            />                            
                           }
-                          label={item.label}
-                      />
+                          else{
+                            return <div style={{display:'flex'}}><FormControlLabel
+                            disabled={item.flag}
+                            className={bufclassname}
+                            control={
+                            <Checkbox
+                                checked={item.checked}
+                                onChange={handleChange}
+                                name={item.name}
+                                style={{color:"#00a64c"}}
+                            />
+                            }
+                            label={item.label}
+                            /><a data-tip data-for={item.name} className={classes.tooltipa}><HelpIcon fontSize='small' color='primary'></HelpIcon></a>
+                            <ReactTooltip id={item.name} type='success' effect='solid' className={classes.tooltip}><span>{item.tooltip}</span></ReactTooltip></div>
                           }
+                        }
                     })
                 }
 

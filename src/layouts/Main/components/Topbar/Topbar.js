@@ -64,6 +64,7 @@ const Topbar = props => {
   const [userEmail, setEmail] = React.useState("");
   const history = useHistory();
   const [notifications, setNotification] = useState([]);
+
   React.useEffect(()=>{
     if (username === "")
     {
@@ -83,31 +84,40 @@ const Topbar = props => {
 
   React.useEffect(()=>{
     console.log('alertnotification', alertnotification);
+    if (alertnotification.fromname == "") return;
     setNotification(()=>{
       const _notifications = [...notifications];
-      console.log("notificationlog", notifications);
-      if (notifications.length == 0 && alertnotification.fromname !=""){
-        console.log("notificationlog1", notifications);
-        alertnotification.count = 1;
-        _notifications.push(alertnotification);
-        console.log("notificationlog1", _notifications);
+      console.log("notificationlog", notifications.length);
+      if (notifications.length == 0){
+        if (alertnotification.fromname !=""){
+          console.log("notificationlog1", notifications);
+          alertnotification.count = 1;
+          _notifications.push(alertnotification);
+          console.log("notificationlog1", _notifications);  
+        }
       }
       else{
         console.log("notificationlog2", notifications);
+        var insertNot;
+        var notFlag = false;
         (notifications||[]).map(item=>{
           if (item.content == alertnotification.content){
-            if (item.count == undefined){
-              item.count = 1
-            }
-            else{
-              item.count = alertnotification.count + 1;
-            }
+            // if (item.count == undefined){
+            //   item.count = 1
+            // }
+            // else{
+            //   item.count = alertnotification.count + 1;
+            // }
+            notFlag = true;
           }
           else{
-            _notifications.push(alertnotification);
           }
         })
-        }
+        if (notFlag == false)
+        {
+          _notifications.push(alertnotification);
+        }        
+      }
       return _notifications;
     });
   },[alertnotification])

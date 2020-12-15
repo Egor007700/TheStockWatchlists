@@ -62,7 +62,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Watchlist = props => {
-  const { className, name, email, avatar,setWatchuserInfo,useremail, timeU,  ...rest } = props;
+  const { className, name, email, avatar,setWatchuserInfo,useremail,  ...rest } = props;
 
   const history = useHistory();
   const classes = useStyles();
@@ -82,6 +82,31 @@ const Watchlist = props => {
         setEmail(useremail);
     }  
     },[ useremail]);
+
+    React.useEffect(()=>{
+      if (userEmail === "")
+      {
+        return;
+      }
+      else{
+        var jwt = require('jwt-simple');
+        let secret = "Hero-Hazan-Trading-Watchlist";  
+        let payload = {
+          'userEmail' : userEmail,
+          'sideEmail' : email
+        }
+        let token = jwt.encode(payload, secret);
+        payload = {"token": token};      
+        console.log('validgroupuser', payload);
+        validgroupuser(payload).then(ret=>{
+          ret['data'] = jwt.decode(ret['data']['result'].substring(2,ret['data']['result'].length - 2), secret, true);  
+          console.log('validgroupuserresult', ret);
+          if(ret['data']['result'] == 'ok'){
+            setFlag(ret['data']['data']);
+          }
+        })
+      }  
+      },[ userEmail]);
 
 
   const handleClick = (event) => {
@@ -164,7 +189,7 @@ const Watchlist = props => {
       // setDatas(ret['data']['data']);
     })
     setFisrtC(name.substring(0,1).toUpperCase());
-  },[name, email, timeU]);
+  },[name, email]);
 
   const converDate = (date)=>{
     return date.split('T')[0];

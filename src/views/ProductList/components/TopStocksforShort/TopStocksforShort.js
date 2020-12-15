@@ -64,6 +64,7 @@ const TopStocksforShort = props => {
                   alt="Product"
                   className={classes.image}
                   src={product.imageUrl}
+                  onError={(e)=>{e.target.onerror = null; e.target.src="/images/avatars/null_symbol.png"}}
                 />
               </ListItemAvatar>
               <ListItemText
